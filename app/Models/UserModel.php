@@ -13,9 +13,10 @@ class UserModel extends Model
 
     // JOBSHEET 4
     // prak 1
-    // protected $fillable = ['level_id', 'username', 'nama', 'password'];
+    protected $fillable = ['level_id', 'username', 'nama', 'password'];
     // protected $fillable = ['level_id', 'username', 'nama'];
 
-    // prak 2.2
+    // prak 2.4
+    // protected $table = 'user';
     
 }
