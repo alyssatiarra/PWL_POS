@@ -68,9 +68,17 @@ class UserController extends Controller
         // });
         // return view('user', ['data' => $user]);
         // no 10
-        $user = UserModel::findOr(20, ['username', 'nama'], function(){
-            abort(404);
-        });
-        return view('user', ['data' => $user]);
+        // $user = UserModel::findOr(20, ['username', 'nama'], function(){
+        //     abort(404);
+        // });
+        // return view('user', ['data' => $user]);
+
+        // prak 2.2
+        // no 2
+        // $user = UserModel::findOrFail(1);
+        // return view('user', ['data' => $user]);
+
+        // no 3
+        $user = UserModel::where('username', 'manager9')->firstOrFail();
     }
 }
