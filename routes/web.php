@@ -30,12 +30,13 @@ Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('login', [AuthController::class, 'postlogin']);
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['authorize:ADM'])->group(function () {
 
-    Route::get('/', [UserController::class, 'index']); //halaman awal
+    Route::get('/', [WelcomeController::class, 'index']); //halaman awal
 
     // masukkan rooute yang perlu diautentikasi disini
     Route::group(['prefix' => 'user'], function () {
+        Route::get('/', [UserController::class, 'index']); //halaman awal
         Route::post('/list', [UserController::class, 'list']);  //data user (json)
         Route::get('/create', [UserController::class, 'create']); //form tambah user
         Route::post('/', [UserController::class, 'store']); //data user baru
