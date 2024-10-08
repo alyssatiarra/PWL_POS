@@ -50,7 +50,7 @@ class AuthController extends Controller{
             ]);
             UserModel::create([
                 'username' => $request->username,
-                'name' => $request->name,
+                'nama' => $request->name,
                 'password' => bcrypt($request->password),
                 'level_id' => 3
             ]);
