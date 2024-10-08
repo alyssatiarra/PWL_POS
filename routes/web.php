@@ -30,7 +30,7 @@ Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('login', [AuthController::class, 'postlogin']);
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 
-Route::middleware(['authorize:ADM'])->group(function () {
+Route::middleware(['authorize:ADM, MNG'])->group(function () {
 
     Route::get('/', [WelcomeController::class, 'index']); //halaman awal
 
