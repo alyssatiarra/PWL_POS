@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Contracts\DataTable;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -239,7 +241,7 @@ class UserController extends Controller
     }
 
     public function list(Request $request){
-        $users = UserModel::select('user_id', 'username', 'nama', 'level_id')
+        $users = UserModel::select('user_id', 'username', 'nama', 'file_profil', 'level_id')
             -> with('level');
 
         if($request->level_id){
@@ -319,8 +321,7 @@ class UserController extends Controller
         return view ('user.edit', ['breadcrumb'=>$breadcrumb, 'page'=>$page, 'user'=>$user, 'level'=>$level, 'activeMenu'=>$activeMenu]);
     }
 
-    public function update(Request $request, string $id)
-    {
+    public function update(Request $request, string $id){
         $request->validate([
             'username' => 'required|string|min:3|unique:m_user,username,' . $id . ',user_id',
             'nama' => 'required|string|max:100',
@@ -364,7 +365,8 @@ class UserController extends Controller
                 'level_id' => 'required|integer',
                 'username' => 'required|string|min:3|unique:m_user,username',
                 'nama' => 'required|string|max:100',
-                'password' => 'required|min:6'
+                'password' => 'required|min:6',
+                'file_profil' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             ];
         // use Illuminate\Support\Facades\Validator;
         $validator = Validator::make($request->all(), $rules);
@@ -377,6 +379,21 @@ class UserController extends Controller
             ]);
         }
 
+        // $fileExtension = $request->file('file_profil')->getClientOriginalExtension();
+        // $fileName = 'profile_' . Auth::user()->user_id . '.' . $fileExtension;
+
+        // $oldFile = 'profile_pictures/' . $fileName;
+        // if (Storage::disk('public')->exists($oldFile)) {
+        //     Storage::disk('public')->delete($oldFile);
+        // }
+
+        // $path = $request->file('file_profil')->storeAs('profile_pictures', $fileName, 'public');
+        // session(['profile_img_path' => $path]);
+
+        $fileName = time() . $request->file('file_profil')->getClientOriginalExtension();
+        $path = $request->file('file_profil')->storeAs('images', $fileName);
+        $request['file_profil'] = '/storage/' . $path;
+
         UserModel::create($request->all());
             return response()->json([
                 'status' => true,
@@ -385,6 +402,7 @@ class UserController extends Controller
         }
         redirect('/');
     }
+
     Public function edit_ajax(string $id){
         $user = UserModel::find($id);
         $level = LevelModel::select('level_id', 'level_nama') -> get();
@@ -401,8 +419,10 @@ class UserController extends Controller
                 'level_id' => 'required|integer', 
                 'username' => 'required|max:20|unique:m_user,username,'.$id.',user_id', 
                 'nama'     => 'required|max:100', 
-                'password' => 'nullable|min:6|max:20' 
+                'password' => 'nullable|min:6|max:20',
+                'file_profil' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             ]; 
+
             $validator = Validator::make($request->all(), $rules); 
  
             if ($validator->fails()) { 
@@ -412,13 +432,31 @@ class UserController extends Controller
                     'msgField' => $validator->errors()  
                 ]); 
             } 
-     
+    
             $check = UserModel::find($id); 
             if ($check) { 
                 if(!$request->filled('password') ){  
                     $request->request->remove('password'); 
                 } 
                  
+                // $fileExtension = $request->file('file_profil')->getClientOriginalExtension();
+                // $fileName = 'profile_' . Auth::user()->user_id . '.' . $fileExtension;
+
+                // $oldFile = 'profile_pictures/' . $fileName;
+                // if (Storage::disk('public')->exists($oldFile)) {
+                //     Storage::disk('public')->delete($oldFile);
+                // }
+                // $path = $request->file('file_profil')->storeAs('profile_pictures', $fileName, 'public');
+                // session(['profile_img_path' => $path]);
+
+                $fileName = time() . $request->file('file_profil')->getClientOriginalExtension();
+                $path = $request->file('file_profil')->storeAs('images', $fileName);
+                $request['file_profil'] = '/storage/' . $path;
+                
+                if (!$request->filled('file_profil')) { // jika password tidak diisi, maka hapus dari request 
+                    $request->request->remove('file_profil');
+                }
+
                 $check->update($request->all()); 
                 return response()->json([ 
                     'status'  => true, 

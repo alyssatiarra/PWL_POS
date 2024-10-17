@@ -15,7 +15,12 @@ class AuthController extends Controller{
     public function postlogin(Request $request){
         if($request->ajax() || $request->wantsJson()){
         $credentials = $request->only('username', 'password');
+
         if (Auth::attempt($credentials)) {
+            session([
+                'profile_img_path' => Auth::user()->foto,
+                'user_id' => Auth::user()->user_id
+            ]);
             return response()->json([
                 'status' => true,
                 'message' => 'Login Berhasil',

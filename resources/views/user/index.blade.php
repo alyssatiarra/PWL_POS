@@ -34,7 +34,14 @@
         </div>
       <table class="table table-bordered table-striped table-hover table-sm" id="table_user"> 
         <thead> 
-          <tr><th>ID</th><th>Username</th><th>Nama</th><th>Level Pengguna</th><th>Aksi</th></tr> 
+          <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Nama</th>
+            <th>Level Pengguna</th>
+            <th>Foto Profil</th>
+            <th>Aksi</th>
+          s</tr> 
         </thead> 
     </table> 
   </div> 
@@ -89,6 +96,12 @@
               className: "", 
               orderable: false,     
               searchable: false     
+            },{
+              data: "file_profil",
+              className: "",
+              width: "14%",
+              orderable: false,
+              searchable: false
             },{ 
               data: "aksi",                
               className: "", 

@@ -31,7 +31,7 @@ class UserModel extends Authenticatable{
     use HasFactory;
     protected $table = 'm_user';
     protected $primaryKey = 'user_id';
-    protected $fillable = ['username', 'password', 'nama', 'level_id', 'created_at', 'update_at'];
+    protected $fillable = ['username', 'password', 'nama', 'level_id', 'file_profil', 'created_at', 'update_at'];
     protected $casts = ['password' => 'hashed'];
 
     public function level(): BelongsTo{

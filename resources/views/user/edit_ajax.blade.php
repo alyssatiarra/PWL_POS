@@ -16,7 +16,7 @@
         </div>
     </div>
 @else
-    <form action="{{ url('/user/' . $user->user_id . '/update_ajax') }}" method="POST" id="form-edit">
+    <form action="{{ url('/user/' . $user->user_id . '/update_ajax') }}" method="POST" id="form-edit" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div id="modal-master" class="modal-dialog modal-lg" role="document">
@@ -49,6 +49,12 @@
                         <input value="{{ $user->nama }}" type="text" name="nama" id="nama" class="form-control"
                             required>
                         <small id="error-nama" class="error-text form-text text-danger"></small>
+                    </div>
+                    <div class="form-group">
+                        <label>Foto Profil</label>
+                        <input type="file" name="file_profil" id="file_profil" class="form-control">
+                        <small class="form-text text-muted">Abaikan jika tidak ingin ubah foto profil</small>
+                        <small id="error-file_profil" class="error-text form-text text-danger"></small>
                     </div>
                     <div class="form-group">
                         <label>Password</label>
@@ -86,13 +92,20 @@
                     password: {
                         minlength: 6,
                         maxlength: 20
+                    },
+                    file_profil: {
+                        extension: "jpg|jpeg|png|ico|bmp"
                     }
                 },
                 submitHandler: function(form) {
+                    var formData = new FormData(form); 
                     $.ajax({
                         url: form.action,
                         type: form.method,
-                        data: $(form).serialize(),
+                        // data: $(form).serialize(),
+                        data: formData,
+                        processData: false, 
+                        contentType: false,
                         success: function(response) {
                             if (response.status) {
                                 $('#myModal').modal('hide');
