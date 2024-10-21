@@ -22,7 +22,7 @@
         <div id="modal-master" class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Hapus Data Lavel</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Hapus Data Supplier</h5>
                     <button type="button" class="close" data-dismiss="modal" aria label="Close"><span
                             aria-hidden="true">&times;</span></button>
                 </div>
@@ -33,15 +33,15 @@
                     </div>
                     <table class="table table-sm table-bordered table-striped">
                         <tr>
-                            <th class="text-right col-3">supplier Kode :</th>
+                            <th class="text-right col-3">Supplier Kode :</th>
                             <td class="col-9">{{ $supplier->supplier_kode }}</td>
                         </tr>
                         <tr>
-                            <th class="text-right col-3">supplier Nama :</th>
+                            <th class="text-right col-3">Supplier Nama :</th>
                             <td class="col-9">{{ $supplier->supplier_nama }}</td>
                         </tr>
                         <tr>
-                            <th class="text-right col-3">supplier Alamat :</th>
+                            <th class="text-right col-3">Supplier Alamat :</th>
                             <td class="col-9">{{ $supplier->supplier_alamat }}</td>
                         </tr>
                     </table>

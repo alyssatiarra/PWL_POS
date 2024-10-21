@@ -16,7 +16,7 @@
         </div>
     </div>
 @else
-    <form action="{{ url('/user/' . $user->user_id . '/update_ajax') }}" method="POST" id="form-edit" enctype="multipart/form-data">
+    <form action="{{ url('/user/' . $user->user_id . '/update_ajax') }}" method="POST" id="form-edit">
         @csrf
         @method('PUT')
         <div id="modal-master" class="modal-dialog modal-lg" role="document">
@@ -46,7 +46,7 @@
                     </div>
                     <div class="form-group">
                         <label>Nama</label>
-                        <input value="{{ $user->nama }}" type="text" name="nama" id="nama" class="form-control"
+                        <input value="{{ $user->name }}" type="text" name="name" id="name" class="form-control"
                             required>
                         <small id="error-nama" class="error-text form-text text-danger"></small>
                     </div>
@@ -59,8 +59,7 @@
                     <div class="form-group">
                         <label>Password</label>
                         <input value="" type="password" name="password" id="password" class="form-control">
-                        <small class="form-text text-muted">Abaikan jika tidak ingin ubah
-                            password</small>
+                        <small class="form-text text-muted">Abaikan jika tidak ingin ubah password</small>
                         <small id="error-password" class="error-text form-text text-danger"></small>
                     </div>
                 </div>
@@ -84,7 +83,7 @@
                         minlength: 3,
                         maxlength: 20
                     },
-                    nama: {
+                    name: {
                         required: true,
                         minlength: 3,
                         maxlength: 100
@@ -98,14 +97,15 @@
                     }
                 },
                 submitHandler: function(form) {
-                    var formData = new FormData(form); 
+                    var formData = new FormData(
+                form); // Jadikan form ke FormData untuk menghandle file 
+
                     $.ajax({
                         url: form.action,
                         type: form.method,
-                        // data: $(form).serialize(),
                         data: formData,
-                        processData: false, 
-                        contentType: false,
+                        processData: false, // setting processData dan contentType ke false, untuk menghandle file 
+                    contentType: false,
                         success: function(response) {
                             if (response.status) {
                                 $('#myModal').modal('hide');

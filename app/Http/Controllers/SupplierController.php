@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\Contracts\DataTable;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class SupplierController extends Controller
 {
@@ -23,6 +24,7 @@ class SupplierController extends Controller
         $supplier = SupplierModel::all();
         return view('supplier.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'supplier' => $supplier, 'activeMenu' => $activeMenu]);
     }
+
     public function list(Request $request)
     {
         $suppliers = SupplierModel::all();
@@ -38,6 +40,7 @@ class SupplierController extends Controller
             ->rawColumns(['aksi']) // memberitahu bahwa kolom aksi adalah html 
             ->make(true);
     }
+
     public function create()
     {
         $breadcrumb = (object) [
@@ -51,6 +54,7 @@ class SupplierController extends Controller
         $activeMenu = 'supplier';
         return view('supplier.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu, 'supplier' => $supplier]);
     }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -65,6 +69,7 @@ class SupplierController extends Controller
         ]);
         return redirect('/supplier')->with('success', 'Data supplier berhasil disimpan');
     }
+
     public function show(string $id)
     {
         $supplier = SupplierModel::find($id);
@@ -78,6 +83,7 @@ class SupplierController extends Controller
         $activeMenu = 'supplier';
         return view('supplier.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'supplier' => $supplier, 'activeMenu' => $activeMenu]);
     }
+
     public function edit(string $id)
     {
         $supplier = SupplierModel::find($id);
@@ -91,6 +97,7 @@ class SupplierController extends Controller
         $activeMenu = 'supplier';
         return view('supplier.edit', ['breadcrumb' => $breadcrumb, 'page' => $page, 'supplier' => $supplier, 'supplier' => $supplier, 'activeMenu' => $activeMenu]);
     }
+
     public function update(Request $request, string $id)
     {
         $request->validate([
@@ -105,7 +112,9 @@ class SupplierController extends Controller
         ]);
         return redirect('/supplier')->with('success', "Data supplier berhasil diubah");
     }
-    public function destroy(string $id){
+
+    public function destroy(string $id)
+    {
         $check = SupplierModel::find($id);
         if (!$check) {
             return redirect('/supplier')->with('error', 'Data supplier tidak ditemukan');
@@ -120,9 +129,9 @@ class SupplierController extends Controller
 
     public function create_ajax()
     {
-        $supplier = SupplierModel::select('supplier_id', 'supplier_nama')->get();
-        return view('supplier.create_ajax')->with('supplier', $supplier);
+        return view('supplier.create_ajax');
     }
+
     public function store_ajax(Request $request)
     {
         if ($request->ajax() || $request->wantsJson()) {
@@ -147,11 +156,13 @@ class SupplierController extends Controller
         }
         redirect('/');
     }
+
     public function edit_ajax(string $id)
     {
         $supplier = SupplierModel::find($id);
         return view('supplier.edit_ajax', ['supplier' => $supplier]);
     }
+
     public function update_ajax(Request $request, $id)
     {
         // cek apakah request dari ajax 
@@ -186,11 +197,13 @@ class SupplierController extends Controller
         }
         return redirect('/');
     }
+
     public function confirm_ajax(string $id)
     {
         $supplier = SupplierModel::find($id);
         return view('supplier.confirm_ajax', ['supplier' => $supplier]);
     }
+
     public function delete_ajax(Request $request, string $id)
     {
         if ($request->ajax() || $request->wantsJson()) {
@@ -209,5 +222,22 @@ class SupplierController extends Controller
             }
             return redirect('/');
         }
+    }
+
+    public function show_ajax(string $id)
+    {
+        $supplier = SupplierModel::find($id);
+        return view('supplier.show_ajax', ['supplier' => $supplier]);
+    }
+
+    public function export_pdf()
+    {
+        $supplier = SupplierModel::select('supplier_kode', 'supplier_nama', 'supplier_alamat') -> get();
+        $pdf = Pdf::loadView('supplier.export_pdf', ['supplier' => $supplier]);
+        $pdf->setPaper('a4', 'portrait');
+        $pdf->setOption("isRemoteEnable", true);
+        $pdf->render();
+
+        return $pdf->stream('Data Supplier ' . date('Y-m-d H:i:s') . '.pdf');
     }
 }
