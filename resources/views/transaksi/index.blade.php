@@ -6,6 +6,7 @@
             <h3 class="card-title">Daftar Penjualan</h3>
             <div class="card-tools">
                 {{-- <a class="btn btn-sm btn-primary mt-1" href="{{ url('penjualan/create') }}">Tambah</a> --}}
+                <button onclick="modalAction('{{ url('/transaksi/import') }}')" class="btn btn-info">Import Transaksi</button>
                 <a href="{{ url('/transaksi/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file-pdf"></i> Export
                     Transaksi</a>
                 <button onclick="modalAction('{{ url('/transaksi/create_ajax') }}')" class="btn btn-success">Tambah
@@ -34,8 +35,8 @@
             </table>
         </div>
     </div>
-    <div id="myModal" class="modal fade animate shake" tabindex="-1" data-backdrop="static" data-keyboard="false" role="dialog"
-        data-width="75%"></div>
+    <div id="myModal" class="modal fade animate shake" tabindex="-1" data-backdrop="static" data-keyboard="false"
+        role="dialog" data-width="75%"></div>
 @endsection
 
 @push('js')

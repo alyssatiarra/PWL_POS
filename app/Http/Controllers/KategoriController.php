@@ -245,10 +245,10 @@ class KategoriController extends Controller
         }
     }
 
-    public function show_ajax(string $id){
+    public function show_ajax(string $id)
+    {
         $kategori = KategoriModel::find($id);
         return view('kategori.show_ajax', ['kategori' => $kategori]);
-
     }
 
     public function export_pdf()
@@ -273,10 +273,9 @@ class KategoriController extends Controller
     {
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
-                // validasi file harus xls atau xlsx, max 1MB 
+                // validasi file harus xls atau xlsx, max 1MB
                 'file_kategori' => ['required', 'mimes:xlsx', 'max:1024']
             ];
-
             $validator = Validator::make($request->all(), $rules);
             if ($validator->fails()) {
                 return response()->json([
@@ -285,36 +284,27 @@ class KategoriController extends Controller
                     'msgField' => $validator->errors()
                 ]);
             }
-
-            $file = $request->file('file_kategori');  // ambil file dari request 
-
-            $reader = IOFactory::createReader('Xlsx');  // load reader file excel 
-            $reader->setReadDataOnly(true);             // hanya membaca data 
-            $spreadsheet = $reader->load($file->getRealPath()); // load file excel 
-            $sheet = $spreadsheet->getActiveSheet();    // ambil sheet yang aktif 
-
-            $data = $sheet->toArray(null, false, true, true);   // ambil data excel 
-
+            $file = $request->file('file_kategori'); // ambil file dari request
+            $reader = IOFactory::createReader('Xlsx'); // load reader file excel
+            $reader->setReadDataOnly(true); // hanya membaca data
+            $spreadsheet = $reader->load($file->getRealPath()); // load file excel
+            $sheet = $spreadsheet->getActiveSheet(); // ambil sheet yang aktif
+            $data = $sheet->toArray(null, false, true, true); // ambil data excel
             $insert = [];
-            if (count($data) > 1) { // jika data lebih dari 1 baris 
+            if (count($data) > 1) { // jika data lebih dari 1 baris
                 foreach ($data as $baris => $value) {
-                    if ($baris > 1) { // baris ke 1 adalah header, maka lewati 
+                    if ($baris > 1) { // baris ke 1 adalah header, maka lewati
                         $insert[] = [
-                            'kategori_id' => $value['A'],
-                            'kategori_kode' => $value['B'],
-                            'kategori_nama' => $value['C'],
-                            'harga_beli' => $value['D'],
-                            'harga_jual' => $value['E'],
+                            'kategori_kode' => $value['A'],
+                            'kategori_nama' => $value['B'],
                             'created_at' => now(),
                         ];
                     }
                 }
-
                 if (count($insert) > 0) {
-                    // insert data ke database, jika data sudah ada, maka diabaikan 
+                    // insert data ke database, jika data sudah ada, maka diabaikan
                     KategoriModel::insertOrIgnore($insert);
                 }
-
                 return response()->json([
                     'status' => true,
                     'message' => 'Data berhasil diimport'
@@ -328,5 +318,4 @@ class KategoriController extends Controller
         }
         return redirect('/');
     }
-
 }

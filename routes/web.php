@@ -54,6 +54,8 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax']); //hapus ajax
             Route::delete('/{id}', [UserController::class, 'destroy']); //hapus data user
             Route::get('/export_pdf', [UserController::class, 'export_pdf']);
+            Route::get('/import', [UserController::class, 'import']); //ajax import excel
+            Route::post('/import_ajax', [UserController::class, 'import_ajax']); //ajax import excel
         });
 
         Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
@@ -62,7 +64,7 @@ Route::middleware(['auth'])->group(function () {
         });
     });
 
-    Route::middleware(['authorize:ADM,MNG,STF,CUS'])->group(function(){
+    Route::middleware(['authorize:ADM,MNG,STF,CUS'])->group(function () {
         Route::get('/profile', [ProfileController::class, 'index']);
         Route::get('/profile/{id}/edit_ajax', [ProfileController::class, 'edit_ajax']);
         Route::put('/profile/{id}/update_ajax', [ProfileController::class, 'update_ajax']);
@@ -88,6 +90,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{id}/show_ajax', [LevelController::class, 'show_ajax']);
             Route::get('/export_pdf', [LevelController::class, 'export_pdf']);
             Route::delete('/{id}', [LevelController::class, 'destroy']); //hapus data user
+            Route::get('/import', [LevelController::class, 'import']); //ajax import excel
+            Route::post('/import_ajax', [LevelController::class, 'import_ajax']); //ajax import excel
         });
     });
 
@@ -110,6 +114,7 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/{id}/delete_ajax', [KategoriController::class, 'delete_ajax']); //hapus ajax
             Route::delete('/{id}', [KategoriController::class, 'destroy']); //hapus data user
             Route::post('/import_ajax', [KategoriController::class, 'import_ajax']);
+            Route::get('/import', [KategoriController::class, 'import_ajax']);
         });
     });
 
@@ -131,6 +136,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{id}/delete_ajax', [SupplierController::class, 'confirm_ajax']); //confirm delete ajax
             Route::delete('/{id}/delete_ajax', [SupplierController::class, 'delete_ajax']); //hapus ajax
             Route::delete('/{id}', [SupplierController::class, 'destroy']); //hapus data user
+            Route::get('/import', [SupplierController::class, 'import']); //ajax import excel
+            Route::post('/import_ajax', [SupplierController::class, 'import_ajax']); //ajax import excel
         });
     });
 
@@ -176,6 +183,8 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/{id}/delete_ajax', [StokController::class, 'delete_ajax']);
             Route::get('/export_pdf', [StokController::class, 'export_pdf']);
             Route::delete('/{id}', [StokController::class, 'destroy']);
+            Route::get('/import', [StokController::class, 'import']); //ajax import excel
+            Route::post('/import_ajax', [StokController::class, 'import_ajax']); //ajax import excel
         });
     });
 
@@ -198,6 +207,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/export_pdf', [TransaksiController::class, 'export_pdf']);
             Route::get('{id}/export_detail_pdf', [TransaksiController::class, 'export_detail_pdf']);
             Route::delete('/{id}', [TransaksiController::class, 'destroy']);
+            Route::get('/import', [StokController::class, 'import']); //ajax import excel
+            Route::post('/import_ajax', [StokController::class, 'import_ajax']); //ajax import excel
         });
     });
 });
