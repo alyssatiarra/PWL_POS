@@ -456,8 +456,9 @@ class UserController extends Controller
             ];
 
             // Handle profile image file upload
+            $user = UserModel::create($newReq);
             $fileExtension = $request->file('file_profil')->getClientOriginalExtension();
-            $fileName = 'profile_' . Auth::user()->user_id . '.' . $fileExtension;
+            $fileName = 'profile_' . $user->user_id . '.' . $fileExtension;
 
             // Check if an existing profile picture exists and delete it
             $oldFile = 'profile_pictures/' . $fileName;
@@ -467,13 +468,17 @@ class UserController extends Controller
 
             // Store the new file with the user id as the file name
             $path = $request->file('file_profil')->storeAs('profile_pictures', $fileName, 'public');
-            session(['profile_img_path' => Auth::user()->file_profil]);
+            // session(['profile_img_path' => Auth::user()->file_profil]);
 
-            // Add the profile file name to the new request data
-            $newReq['file_profil'] = $path;
+            // // Add the profile file name to the new request data
+            // $newReq['file_profil'] = $path;
 
-            // Create the new user record in the database
-            UserModel::create($newReq);
+            // // Create the new user record in the database
+            // UserModel::create($newReq);
+
+            $user = UserModel::find($user->user_id);
+            $user->image_profile = $path;
+            $user->save();
 
             return response()->json([
                 'status'  => true,
